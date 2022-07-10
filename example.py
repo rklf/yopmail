@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import sys
-from ym import Yopmail
+from yopmail import Yopmail
 
 def main():
     y = Yopmail('test', proxies=None)
