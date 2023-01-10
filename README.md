@@ -5,6 +5,11 @@ Get mails from a Yopmail inbox, save them as ``.html``
 
 
 ## 📖 Usage:
+Install the latest version from PyPI by using [pip](https://pip.pypa.io/):
+```
+pip install yopmail
+```
+
 Instantiate ``Yopmail`` class with username as parameter (with ``@`` or not) and provide proxies if needed
 ```python
 y = Yopmail('test', proxies=None)
