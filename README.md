@@ -10,6 +10,11 @@ Install the latest version from PyPI by using [pip](https://pip.pypa.io/):
 pip install yopmail
 ```
 
+Import ``Yopmail`` class from ``yopmail`` module
+```python
+from yopmail import Yopmail
+```
+
 Instantiate ``Yopmail`` class with username as parameter (with ``@`` or not) and provide proxies if needed
 ```python
 y = Yopmail('test', proxies=None)
