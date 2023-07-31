@@ -1,0 +1,1 @@
+from .yopmail import Yopmail
