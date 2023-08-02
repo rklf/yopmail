@@ -7,7 +7,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='yopmail',
-    version='1.4',
+    version='1.5',
     description="A Python module to get mails from a Yopmail inbox, save them",
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -15,7 +15,7 @@ setup(
     license='MIT',
     author="rklf",
     packages = find_packages(),
-    python_requires='>=3.8',
+    python_requires='>=3.10',
     url='https://github.com/rklf/yopmail',
     keywords='yopmail get mails retrieve scrap emails',
     install_requires=[

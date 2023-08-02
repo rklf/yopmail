@@ -49,7 +49,9 @@ class Yopmail:
                 context = 'yp'
                 req = self.session.get(self.url, proxies=proxies)
                 if not req:
-                    return None
+                    if req.status_code == 429:
+                        raise requests.ConnectionError(f"Too Many Requests (429 status code) error, use a proxy or try again later")
+                    raise Exception(req)
                 self.extract_yp(req)
                 params = {**params, 'yp': self.yp}
 
@@ -57,7 +59,9 @@ class Yopmail:
                 context = 'yj'
                 req = self.session.get('https://yopmail.com/ver/5.0/webmail.js', proxies=proxies)
                 if not req:
-                    return None
+                    if req.status_code == 429:
+                        raise requests.ConnectionError(f"Too Many Requests (429 status code) error, use a proxy or try again later")
+                    raise Exception(req)
                 self.extract_yj(req)
                 params = {**params, 'yj': self.yj}
 
@@ -65,12 +69,14 @@ class Yopmail:
                 context = 'ycons'
                 req = self.session.get('https://yopmail.com/consent?c=deny', proxies=proxies) # Set consent cookies
                 if not req:
-                    return None
+                    if req.status_code == 429:
+                        raise requests.ConnectionError(f"Too Many Requests (429 status code) error, use a proxy or try again later")
+                    raise Exception(req)
             self.add_ytime()
             return self.session.get(url, params=params, cookies=self.jar, proxies=proxies)
         except requests.exceptions.ProxyError as err:
-                print(f"[x] Couldn't process {context} request (ProxyError):", err)
-                return None
+            print(f"[x] Couldn't process {context} request (ProxyError):", err)
+            return None
         except requests.exceptions.ConnectionError as err:
             print(f"[x] Couldn't process {context} request (ConnectionError):", err)
             return None
