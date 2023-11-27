@@ -4,6 +4,7 @@ import string
 import re
 import requests
 from bs4 import BeautifulSoup
+from typing import Optional
 
 
 class YopmailHTML:
@@ -42,7 +43,7 @@ class Yopmail:
         self.ycons = None
         self.ytime = None
 
-    def request(self, url: str, params=None, proxies=None, context: str = None) -> requests.models.Response|None:
+    def request(self, url: str, params=None, proxies=None, context: str = None) -> Optional[requests.models.Response]:
         proxies = proxies if proxies is not None else self.proxies
         try:
             if self.yp is None:
