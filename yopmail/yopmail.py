@@ -40,7 +40,6 @@ class Yopmail:
         # Yopmail needed parameters:
         self.yp = None
         self.yj = None
-        self.ycons = None
         self.ytime = None
 
     def request(self, url: str, params=None, proxies=None, context: str = None) -> Optional[requests.models.Response]:
@@ -58,7 +57,7 @@ class Yopmail:
 
             if self.yj is None:
                 context = 'yj'
-                req = self.session.get('https://yopmail.com/ver/5.0/webmail.js', proxies=proxies)
+                req = self.session.get('https://yopmail.com/ver/8.7/webmail.js', proxies=proxies)
                 if not req:
                     if req.status_code == 429:
                         raise requests.ConnectionError(f"Too Many Requests (429 status code) error, use a proxy or try again later")
@@ -66,13 +65,6 @@ class Yopmail:
                 self.extract_yj(req)
                 params = {**params, 'yj': self.yj}
 
-            if self.ycons is None:
-                context = 'ycons'
-                req = self.session.get('https://yopmail.com/consent?c=deny', proxies=proxies) # Set consent cookies
-                if not req:
-                    if req.status_code == 429:
-                        raise requests.ConnectionError(f"Too Many Requests (429 status code) error, use a proxy or try again later")
-                    raise Exception(req)
             self.add_ytime()
             return self.session.get(url, params=params, cookies=self.jar, proxies=proxies)
         except requests.exceptions.ProxyError as err:
@@ -115,10 +107,10 @@ class Yopmail:
             'ctrl': '',     # mailid or ''
             'yp': self.yp,
             'yj': self.yj,
-            'v': '8.4',
+            'v': '8.7',
             'r_c': '',      # '' or recaptcha? 
             'id': '',       # idaff / sometimes "none" / nextmailid='last' / mailid = id('m%d'%mail_nr)
-            'spam': True,   # False
+            'ad': '0',       # 0 or 1 (advertising i guess)
             # 'scrl': '',
             # 'yf': '005',
         }
