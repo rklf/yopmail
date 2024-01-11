@@ -41,6 +41,18 @@ class Yopmail:
         self.yp = None
         self.yj = None
         self.ytime = None
+        self.version = self.find_version(proxies=proxies) or '9.0'
+
+
+    def find_version(self, proxies=None) -> str:
+        # Looking for:
+        #   <script src="/ver/[VERSION]/webmail.js"></script>
+        if req := self.session.get(self.url, proxies=proxies):
+            bs = BeautifulSoup(req.text, 'html.parser')
+            el = bs.find('script', {'src': re.compile(r'\/ver\/([0-9.]*)\/webmail.js')})
+            self.version = el['src'].split('/')[2]
+            return self.version
+        return None
 
     def request(self, url: str, params=None, proxies=None, context: str = None) -> Optional[requests.models.Response]:
         proxies = proxies if proxies is not None else self.proxies
@@ -57,7 +69,7 @@ class Yopmail:
 
             if self.yj is None:
                 context = 'yj'
-                req = self.session.get('https://yopmail.com/ver/8.7/webmail.js', proxies=proxies)
+                req = self.session.get(f'https://yopmail.com/ver/{self.version}/webmail.js', proxies=proxies)
                 if not req:
                     if req.status_code == 429:
                         raise requests.ConnectionError(f"Too Many Requests (429 status code) error, use a proxy or try again later")
@@ -107,7 +119,7 @@ class Yopmail:
             'ctrl': '',     # mailid or ''
             'yp': self.yp,
             'yj': self.yj,
-            'v': '8.7',
+            'v': self.version,
             'r_c': '',      # '' or recaptcha? 
             'id': '',       # idaff / sometimes "none" / nextmailid='last' / mailid = id('m%d'%mail_nr)
             'ad': '0',       # 0 or 1 (advertising i guess)
@@ -133,6 +145,7 @@ class Yopmail:
         params = {
             'b': self.username,
             'id': mail_id  # mail_id "{'i' to show images || 'm' to don't}e_ZGpjZGV1ZwRkZwD0ZQNjAmx0AmpkAj=="
+            # 'r_c': '',   # recaptcha
         }
         req = self.request(f'{self.url}mail', params=params, proxies=proxies, context='mail body')
         mail_html = str(BeautifulSoup(req.text, 'html.parser').find('div', {'id': 'mail'}))
