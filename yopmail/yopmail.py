@@ -150,3 +150,20 @@ class Yopmail:
         req = self.request(f'{self.url}mail', params=params, proxies=proxies, context='mail body')
         mail_html = str(BeautifulSoup(req.text, 'html.parser').find('div', {'id': 'mail'}))
         return YopmailHTML(mail_html, self.username, mail_id)
+
+    def delete_mail(self, mailid, page=1, proxies=None) -> requests.models.Response|None:
+        params = {
+            'login': self.username,
+            'p': str(page), # page
+            'd': mailid,        # mailid? to delete?
+            'ctrl': '',     # mailid or ''
+            'yp': self.yp,
+            'yj': self.yj,
+            'v': self.version,
+            'r_c': '',      # '' or recaptcha? 
+            'id': '',       # idaff / sometimes "none" / nextmailid='last' / mailid = id('m%d'%mail_nr)
+            'ad': '0',       # 0 or 1 (advertising i guess)
+            # 'scrl': '',
+            # 'yf': '005',
+        }
+        return self.request(f'{self.url}inbox', params=params, proxies=proxies, context='inbox')
