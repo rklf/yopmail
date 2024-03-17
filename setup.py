@@ -7,13 +7,14 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='yopmail',
-    version='1.8',
+    version='1.9',
     description="A Python module to get mails from a Yopmail inbox, save them",
     long_description=long_description,
     long_description_content_type='text/markdown',
     readme = "README.md",
     license='MIT',
     author="rklf",
+    author_email="11515950+rklf@users.noreply.github.com",
     packages = find_packages(),
     python_requires='>=3.10',
     url='https://github.com/rklf/yopmail',
