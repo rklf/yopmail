@@ -166,4 +166,4 @@ class Yopmail:
             # 'scrl': '',
             # 'yf': '005',
         }
-        return self.request(f'{self.url}inbox', params=params, proxies=proxies, context='inbox')
+        return self.request(f'{self.url}inbox', params=params, proxies=proxies, context='delete mail')
